@@ -2,6 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class CollisionEnter : MonoBehaviour
@@ -20,41 +21,52 @@ public class CollisionEnter : MonoBehaviour
 
     bool isControllable = true; //karakterimizi bir yerde kontrol etmekte sıkıntı yaşarsak bu ifadenin true olduğunu 
                                 //  veya başka yerde yanlış kullanmış olma durumuna karşı bunu kontrol etmeliyiz.
+    bool isCollidable = true;
 
-
-    //buradaki şey için aslında if else kullanabilirdik ama hoca switch öğretmek için kullanacağını söyledi.
-
-
-    void Start()    
+    private void Start()    
     {
-        audioSource = GetComponent<AudioSource>();  
-            
+        audioSource = GetComponent<AudioSource>();      
     }
 
-
-     private void OnCollisionEnter(Collision other) 
+    private void Update()
     {
-        if(!isControllable) //kontrol edilemiyorsa fonksiyondan çık dedik
+        RespondDebugKeys();
+    }
+
+    private  void RespondDebugKeys()
+    {
+        if(Keyboard.current.lKey.wasPressedThisFrame)
+        {
+            LoadNextLevel();
+        }
+        else if(Keyboard.current.cKey.wasPressedThisFrame)
+        {
+           isCollidable = !isCollidable;
+          
+        }
+    }
+
+    private void OnCollisionEnter(Collision other) 
+    {
+        if(!isControllable ||  !isCollidable) //kontrol edilemiyorsa fonksiyondan çık dedik
         {
             return;
         }
         
-        switch (other.gameObject.tag)  
+        switch (other.gameObject.tag) //burada aslınd if-else kullanabilirdik ama hoca switch öğretmek için kullanacağını söyledi.
+
         {
             case "Friendly":
                 Debug.Log("Everything is looking good");
                 break;  
 
             case "Finish":
-               // LoadNextLevel();
-               StartNextSequence();
+                StartNextSequence();
                 break;
 
             default:
                 StartCrashSequence();                
-
                 break;
-            
         }
     }
 

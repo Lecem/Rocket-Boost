@@ -35,7 +35,7 @@ public class Movement : MonoBehaviour
         rotation.Enable(); //burada etkinleştiriyoruz sanırım? aynen.      
     }
 
-     void FixedUpdate()
+    private void FixedUpdate()
     {
         ProcessThrust();
         ProcessRotation();
@@ -48,15 +48,13 @@ public class Movement : MonoBehaviour
         {
             StartThrusting();
         }
-
         else
         {
-          audioSource.Stop(); 
-          mainEngineParticles.Stop();
+            StopThrusting();
         }
 
     }
-
+    
     private void StartThrusting()
     {
         rb.AddRelativeForce(Vector3.up * thrustStrenght * Time.fixedDeltaTime);
@@ -64,45 +62,62 @@ public class Movement : MonoBehaviour
         {
             audioSource.PlayOneShot(mainEngineSFX);
         }
-
         if (!mainEngineParticles.isPlaying)
         {
             mainEngineParticles.Play();
-
         }
+    }
+    
+    private void StopThrusting()
+    {
+        audioSource.Stop();
+        mainEngineParticles.Stop();
     }
 
     private void ProcessRotation()
     {
         float rotationInput = rotation.ReadValue<float>();
         //Debug.Log("Obje kaç kez döndürüldü:"+ rotationInput); //ihtiyaç olmadığı için kaldırdık
-        
-        if(rotationInput < 0 ) //Sol
+        if (rotationInput < 0) //Sol
         {
-            //transform.Rotate(0f, 0f, 1f); //bunu yazmanın diğer yolu alt satırda
-            //transform.Rotate(Vector3.forward * rotationStrenght * Time.fixedDeltaTime);
-            ApplyRotation(rotationStrenght); 
-             if (!rightThrustParticles.isPlaying) 
-            {
-                leftThrustParticles.Stop();
-                rightThrustParticles.Play(); 
-            }
+            RotateLeft();
         }
-
-        else if (rotationInput > 0 ) //Sag
+        else if (rotationInput > 0) //Sag
         {
-            ApplyRotation(-rotationStrenght);
-            if (!leftThrustParticles.isPlaying) 
-            {
-                rightThrustParticles.Stop();
-                leftThrustParticles.Play(); 
-            }
+            RotateRight();
         }
-        else 
+        else
         {
-           leftThrustParticles.Stop();
-           rightThrustParticles.Stop();
+            StopRotating();
         }
+    }
+    
+    private void RotateLeft()
+    {
+        //transform.Rotate(0f, 0f, 1f); //bunu yazmanın diğer yolu alt satırda
+        //transform.Rotate(Vector3.forward * rotationStrenght * Time.fixedDeltaTime);
+        ApplyRotation(rotationStrenght);
+        if (!rightThrustParticles.isPlaying)
+        {
+            leftThrustParticles.Stop();
+            rightThrustParticles.Play();
+        }
+    }
+    
+    private void RotateRight()
+    {
+        ApplyRotation(-rotationStrenght);
+        if (!leftThrustParticles.isPlaying)
+        {
+            rightThrustParticles.Stop();
+            leftThrustParticles.Play();
+        }
+    }
+    
+    private void StopRotating()
+    {
+        leftThrustParticles.Stop();
+        rightThrustParticles.Stop();
     }
 
     private void ApplyRotation(float rotationThisFrame)
@@ -110,6 +125,5 @@ public class Movement : MonoBehaviour
         rb.freezeRotation = true;
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.fixedDeltaTime);
         rb.freezeRotation = false;
-
     }
 }
