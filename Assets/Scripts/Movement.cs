@@ -1,15 +1,24 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UIElements;
+
 
 public class Movement : MonoBehaviour
 {
+    //PARAMETERS - for tuning, typically set in the editor
+
+    //CACHE - eg. references for readability or speed 
+
+    //STATE - private instances (member) variables
+
     [SerializeField] InputAction thrust;
     [SerializeField] InputAction rotation;
     [SerializeField] float thrustStrenght = 100f;
     [SerializeField] float rotationStrenght = 10f;
-   
-
+    [SerializeField] AudioClip mainEngineSFX;
+    [SerializeField] ParticleSystem mainEngineParticles;
+    [SerializeField] ParticleSystem rightThrustParticles;
+    [SerializeField] ParticleSystem leftThrustParticles;
+       
     Rigidbody rb;
     AudioSource audioSource;
 
@@ -20,7 +29,7 @@ public class Movement : MonoBehaviour
 
     }
 
-     private void OnEnable()//obje aktif olduğu anda çalışır
+    private void OnEnable()//obje aktif olduğu anda çalışır
     {
         thrust.Enable();  
         rotation.Enable(); //burada etkinleştiriyoruz sanırım? aynen.      
@@ -35,21 +44,32 @@ public class Movement : MonoBehaviour
 
     private void ProcessThrust()
     {
-        if (thrust.IsPressed() == true) //parantez içine sadece thrust.IsPressed() yazılırsa da olur
+        if (thrust.IsPressed()) 
         {
-            //Debug.Log("Hoppidik Hoppidik"); //artık ihtiyacımız olmadığı için kaldırdık
-            rb.AddRelativeForce(Vector3.up * thrustStrenght * Time.fixedDeltaTime);
-            if(!audioSource.isPlaying)
-            {
-                audioSource.Play();
-            }    
+            StartThrusting();
         }
 
         else
         {
           audioSource.Stop(); 
+          mainEngineParticles.Stop();
         }
 
+    }
+
+    private void StartThrusting()
+    {
+        rb.AddRelativeForce(Vector3.up * thrustStrenght * Time.fixedDeltaTime);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngineSFX);
+        }
+
+        if (!mainEngineParticles.isPlaying)
+        {
+            mainEngineParticles.Play();
+
+        }
     }
 
     private void ProcessRotation()
@@ -57,17 +77,31 @@ public class Movement : MonoBehaviour
         float rotationInput = rotation.ReadValue<float>();
         //Debug.Log("Obje kaç kez döndürüldü:"+ rotationInput); //ihtiyaç olmadığı için kaldırdık
         
-        if(rotationInput < 0 )
+        if(rotationInput < 0 ) //Sol
         {
             //transform.Rotate(0f, 0f, 1f); //bunu yazmanın diğer yolu alt satırda
             //transform.Rotate(Vector3.forward * rotationStrenght * Time.fixedDeltaTime);
-            ApplyRotation(rotationStrenght);
+            ApplyRotation(rotationStrenght); 
+             if (!rightThrustParticles.isPlaying) 
+            {
+                leftThrustParticles.Stop();
+                rightThrustParticles.Play(); 
+            }
         }
 
-        else if (rotationInput > 0 )
+        else if (rotationInput > 0 ) //Sag
         {
             ApplyRotation(-rotationStrenght);
-
+            if (!leftThrustParticles.isPlaying) 
+            {
+                rightThrustParticles.Stop();
+                leftThrustParticles.Play(); 
+            }
+        }
+        else 
+        {
+           leftThrustParticles.Stop();
+           rightThrustParticles.Stop();
         }
     }
 
@@ -77,14 +111,5 @@ public class Movement : MonoBehaviour
         transform.Rotate(Vector3.forward * rotationThisFrame * Time.fixedDeltaTime);
         rb.freezeRotation = false;
 
-        
     }
-
-    
-
-
-
-
-
-
 }
