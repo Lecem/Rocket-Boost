@@ -1,6 +1,4 @@
 using System;
-using Unity.VisualScripting;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -53,6 +51,10 @@ public class CollisionEnter : MonoBehaviour
             return;
         }
         
+            // if(other.gameObject.CompareTag("Obstacle"))
+            // {
+                
+            // }
         switch (other.gameObject.tag) //burada aslınd if-else kullanabilirdik ama hoca switch öğretmek için kullanacağını söyledi.
 
         {
@@ -64,9 +66,14 @@ public class CollisionEnter : MonoBehaviour
                 StartNextSequence();
                 break;
 
-            default:
+            case "Obstacle":
                 StartCrashSequence();                
                 break;
+            //     case
+
+            // default:
+            //     StartCrashSequence();                
+            //     break;
         }
     }
 
