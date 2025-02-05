@@ -133,7 +133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1346176577323683380, guid: 29c4af55c9e9f2447acb69e138a6ecf3, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.6
+      value: 2.57
       objectReference: {fileID: 0}
     - target: {fileID: 1346176577323683380, guid: 29c4af55c9e9f2447acb69e138a6ecf3, type: 3}
       propertyPath: m_LocalPosition.z
@@ -743,7 +743,7 @@ MonoBehaviour:
   "K\xFCp\xFCs\xFC": {fileID: 1116223221}
   SignRed: {fileID: 339710423}
   SignBlue: {fileID: 177556379}
-  barrelEase: 1
+  barrelEase: 9
 --- !u!4 &1082369404
 Transform:
   m_ObjectHideFlags: 0
@@ -940,7 +940,7 @@ Transform:
   m_GameObject: {fileID: 1116223217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.28, y: 15.75, z: 0}
+  m_LocalPosition: {x: 19.97, y: 15.75, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
