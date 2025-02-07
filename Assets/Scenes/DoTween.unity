@@ -743,7 +743,7 @@ MonoBehaviour:
   "K\xFCp\xFCs\xFC": {fileID: 1116223221}
   SignRed: {fileID: 339710423}
   SignBlue: {fileID: 177556379}
-  barrelEase: 20
+  barrelEase: 7
 --- !u!4 &1082369404
 Transform:
   m_ObjectHideFlags: 0
@@ -940,7 +940,7 @@ Transform:
   m_GameObject: {fileID: 1116223217}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.97, y: 15.75, z: 0}
+  m_LocalPosition: {x: -4.1, y: 27.5, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 0
   m_Children: []
